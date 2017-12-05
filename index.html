@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>MemoryGame</title>
+
+
+
+<style>
+
+
+
+
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    height: 150px;
+    margin-top:5px;
+    background-color:none;
+    text-align:center;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.flex-item {
+
+    color:yellow;
+    background-color: none;
+    width: 150px;
+    height: 150px;
+    margin: 1px;
+    
+    border-radius:12px;border : 2px solid #774911;
+}
+
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border: 1px solid black;
+    border-bottom:none;
+    border-radius:6px;
+
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: gray;
+    color: yellow;
+    text-align: center;
+    border: 4px solid black;
+    border-radius: 6px;
+    padding: 5px 0;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+
+
+
+header, footer {
+
+    padding: 1em;
+    color:#efb29e;
+    background-color: #a88f72;
+    clear: left;
+    text-align: center;
+    border: 5px solid #826136;
+    border-radius:12px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 20;
+    padding: 0;
+    width: 200px;
+    background-color: #e8cba7;
+    border: 2px solid #555;
+    border-radius:12px;
+}
+
+li a {
+    display: block;
+    color: #edbe47;
+    padding: 8px 16px;
+    text-decoration: none;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    
+}
+
+li {
+    text-align: center;
+    border-bottom: 1px solid #555;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+
+
+li a:hover {
+    background-color: #cc934d;
+    color: white;
+    border-radius:12px;
+  border: 2px solid black;
+}
+
+p.jussi {
+    float:center;
+    display: none;
+    color: #edeae6;
+    background-color: #9b7c53;
+    border-radius:12px;
+   border : 2px solid #774911;
+}
+
+
+p.info {
+    display: none;
+    color: #edeae6;
+    background-color: #9b7c53;
+    
+}
+
+div:hover p.info{
+    display: block;
+}
+
+div.infotekija:hover p.jussi {
+    display: block;
+    color:yellow;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; 
+}
+
+
+.button {
+    background-color: #e8bb74;
+    border: 2px solid #826136;
+    border-radius:12px;
+    color: #ad885b;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 26px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.teksti {
+    border: 2px solid red;
+    border-radius: 5px;
+    width:250px;
+background-color:#f2af43;
+}
+
+</style>
+
+
+
+
+
+
+
+</head>
+<body style="background-color:#efd6b8;margin-left:5px;margin-right:5px;">
+
+
+
+<header style="text-align:center;font-size:25px;color:#efb29e;text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;"><img src="brain.png"  style="width:60px;height:40px; margin-right:10px;"><b>CLASSIC MEMORY GAME</b><img src="brain.png"  style="width:60px;height:40px; margin-left:10px;"></header>
+
+
+
+<script>
+
+var kaytetty=[];
+var kuva = ["talo","kissa","tennis","jalkapallo","puu","kirja","auto","pyora","lintu","koira","tietokone","kyna"];
+
+var kuva;
+
+var valinta=0;
+var kortti1;
+var kortti2;
+var rounds=0;
+
+
+var p=0;
+var kortti;
+var kortit=["kuva1","kuva2","kuva3","kuva4","kuva5","kuva6","kuva7","kuva8","kuva9","kuva10","kuva11","kuva12","kuva13","kuva14","kuva15","kuva16","kuva17","kuva18","kuva19","kuva20","kuva21","kuva22","kuva23","kuva24"];
+
+function testi()
+{
+document.getElementById("nappi").innerHTML="SELECT CARDS";
+document.getElementById("nappi").style.color="green";
+kuva= Math.floor(Math.random() * 12) + 1;
+
+kaytetty[0]=kuva;
+for(n=1;n<12;n++)
+{
+    kuva=Math.floor(Math.random()*12)+1;
+   while(1)
+   {
+           sama=0;
+           for(t=0;t<n;t++)
+           {
+                if(kuva==kaytetty[t]){sama=1;}
+           }
+          if(sama==1) {kuva=Math.floor(Math.random()*12)+1;}
+          if(sama==0){kaytetty[n]=kuva; break;}
+   }         
+}
+
+
+for(t=0;t<12;t++)
+{
+if(t==0){kortti="kuva1";}
+if(t==1){kortti="kuva2";}
+if(t==2){kortti="kuva3";}
+if(t==3){kortti="kuva4";}
+if(t==4){kortti="kuva5";}
+if(t==5){kortti="kuva6";}
+if(t==6){kortti="kuva7";}
+if(t==7){kortti="kuva8";}
+if(t==8){kortti="kuva9";}
+if(t==9){kortti="kuva10";}
+if(t==10){kortti="kuva11";}
+if(t==11){kortti="kuva12";}
+
+
+
+if(kaytetty[t]==1){document.getElementById(kortti).src="talo.jpeg";}
+if(kaytetty[t]==2){document.getElementById(kortti).src="kissa.jpeg";}
+if(kaytetty[t]==3){document.getElementById(kortti).src="tennis.jpeg";}
+if(kaytetty[t]==4){document.getElementById(kortti).src="jalkapallo.jpeg";}
+if(kaytetty[t]==5){document.getElementById(kortti).src="puu.jpeg";}
+if(kaytetty[t]==6){document.getElementById(kortti).src="kirja.png";}
+if(kaytetty[t]==7){document.getElementById(kortti).src="auto.jpeg";}
+if(kaytetty[t]==8){document.getElementById(kortti).src="pyora.jpeg";}
+if(kaytetty[t]==9){document.getElementById(kortti).src="lintu.jpeg";}
+if(kaytetty[t]==10){document.getElementById(kortti).src="koira.jpeg";}
+if(kaytetty[t]==11){document.getElementById(kortti).src="tietokone.jpeg";}
+if(kaytetty[t]==12){document.getElementById(kortti).src="kyna.png";}
+}
+
+document.getElementById("kuva1").src="kortti.jpeg";
+document.getElementById("kuva2").src="kortti.jpeg";
+document.getElementById("kuva3").src="kortti.jpeg";
+document.getElementById("kuva4").src="kortti.jpeg";
+document.getElementById("kuva5").src="kortti.jpeg";
+document.getElementById("kuva6").src="kortti.jpeg";
+document.getElementById("kuva7").src="kortti.jpeg";
+document.getElementById("kuva8").src="kortti.jpeg";
+document.getElementById("kuva9").src="kortti.jpeg";
+document.getElementById("kuva10").src="kortti.jpeg";
+document.getElementById("kuva11").src="kortti.jpeg";
+document.getElementById("kuva12").src="kortti.jpeg";
+
+
+testi2();
+
+}
+
+
+function testi2()
+{
+kuva= Math.floor(Math.random() * 12) + 1;
+
+kaytetty[12]=kuva;
+for(n=12;n<24;n++)
+{
+    kuva=Math.floor(Math.random()*12)+1;
+   while(1)
+   {
+           sama=0;
+           for(t=12;t<n;t++)
+           {
+                if(kuva==kaytetty[t]){sama=1;}
+           }
+          if(sama==1) {kuva=Math.floor(Math.random()*12)+1;}
+          if(sama==0){kaytetty[n]=kuva; break;}
+   }         
+}
+
+
+for(t=0;t<12;t++)
+{
+if(t==0){kortti="kuva13";}
+if(t==1){kortti="kuva14";}
+if(t==2){kortti="kuva15";}
+if(t==3){kortti="kuva16";}
+if(t==4){kortti="kuva17";}
+if(t==5){kortti="kuva18";}
+if(t==6){kortti="kuva19";}
+if(t==7){kortti="kuva20";}
+if(t==8){kortti="kuva21";}
+if(t==9){kortti="kuva22";}
+if(t==10){kortti="kuva23";}
+if(t==11){kortti="kuva24";}
+
+
+
+if(kaytetty[t]==1){document.getElementById(kortti).src="talo.jpeg";}
+if(kaytetty[t]==2){document.getElementById(kortti).src="kissa.jpeg";}
+if(kaytetty[t]==3){document.getElementById(kortti).src="tennis.jpeg";}
+if(kaytetty[t]==4){document.getElementById(kortti).src="jalkapallo.jpeg";}
+if(kaytetty[t]==5){document.getElementById(kortti).src="puu.jpeg";}
+if(kaytetty[t]==6){document.getElementById(kortti).src="kirja.png";}
+if(kaytetty[t]==7){document.getElementById(kortti).src="auto.jpeg";}
+if(kaytetty[t]==8){document.getElementById(kortti).src="pyora.jpeg";}
+if(kaytetty[t]==9){document.getElementById(kortti).src="lintu.jpeg";}
+if(kaytetty[t]==10){document.getElementById(kortti).src="koira.jpeg";}
+if(kaytetty[t]==11){document.getElementById(kortti).src="tietokone.jpeg";}
+if(kaytetty[t]==12){document.getElementById(kortti).src="kyna.png";}
+
+document.getElementById("kuva13").src="kortti.jpeg";
+document.getElementById("kuva14").src="kortti.jpeg";
+document.getElementById("kuva15").src="kortti.jpeg";
+document.getElementById("kuva16").src="kortti.jpeg";
+document.getElementById("kuva17").src="kortti.jpeg";
+document.getElementById("kuva18").src="kortti.jpeg";
+document.getElementById("kuva19").src="kortti.jpeg";
+document.getElementById("kuva20").src="kortti.jpeg";
+document.getElementById("kuva21").src="kortti.jpeg";
+document.getElementById("kuva22").src="kortti.jpeg";
+document.getElementById("kuva23").src="kortti.jpeg";
+document.getElementById("kuva24").src="kortti.jpeg";
+
+}
+
+
+
+}
+
+function nayta(kuvanro,nro)
+{
+    
+    
+     if(valinta<2)
+{
+valinta++;
+
+
+    var kuvanumero=kuvanro;
+    var kuvan=nro;
+    
+if(kuvan==1){
+    if(kuvanumero==1){document.getElementById("kuva1").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva1").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva1").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva1").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva1").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva1").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva1").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva1").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva1").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva1").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva1").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva1").src="kyna.png";}
+if(valinta==1)kortti1="kuva1";
+if(valinta==2){kortti2="kuva1";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==2)
+{
+    if(kuvanumero==1){document.getElementById("kuva2").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva2").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva2").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva2").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva2").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva2").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva2").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva2").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva2").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva2").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva2").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva2").src="kyna.png";}
+if(valinta==1)kortti1="kuva2";
+if(valinta==2){kortti2="kuva2";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==3)
+{
+    if(kuvanumero==1){document.getElementById("kuva3").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva3").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva3").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva3").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva3").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva3").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva3").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva3").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva3").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva3").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva3").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva3").src="kyna.png";}
+if(valinta==1)kortti1="kuva3";
+if(valinta==2){kortti2="kuva3";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==4)
+{
+    if(kuvanumero==1){document.getElementById("kuva4").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva4").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva4").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva4").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva4").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva4").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva4").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva4").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva4").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva4").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva4").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva4").src="kyna.png";}
+if(valinta==1)kortti1="kuva4";
+if(valinta==2){kortti2="kuva4";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==5)
+{
+    if(kuvanumero==1){document.getElementById("kuva5").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva5").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva5").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva5").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva5").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva5").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva5").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva5").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva5").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva5").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva5").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva5").src="kyna.png";}
+if(valinta==1)kortti1="kuva5";
+if(valinta==2){kortti2="kuva5";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==6)
+{
+    if(kuvanumero==1){document.getElementById("kuva6").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva6").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva6").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva6").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva6").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva6").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva6").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva6").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva6").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva6").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva6").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva6").src="kyna.png";}
+if(valinta==1)kortti1="kuva6";
+if(valinta==2){kortti2="kuva6";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==7)
+{
+    if(kuvanumero==1){document.getElementById("kuva7").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva7").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva7").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva7").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva7").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva7").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva7").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva7").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva7").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva7").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva7").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva7").src="kyna.png";}
+if(valinta==1)kortti1="kuva7";
+if(valinta==2){kortti2="kuva7";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==8)
+{
+    if(kuvanumero==1){document.getElementById("kuva8").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva8").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva8").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva8").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva8").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva8").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva8").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva8").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva8").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva8").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva8").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva8").src="kyna.png";}
+if(valinta==1)kortti1="kuva8";
+if(valinta==2){kortti2="kuva8";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==9)
+{
+    if(kuvanumero==1){document.getElementById("kuva9").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva9").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva9").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva9").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva9").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva9").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva9").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva9").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva9").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva9").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva9").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva9").src="kyna.png";}
+if(valinta==1)kortti1="kuva9";
+if(valinta==2){kortti2="kuva9";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==10)
+{
+    if(kuvanumero==1){document.getElementById("kuva10").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva10").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva10").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva10").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva10").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva10").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva10").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva10").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva10").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva10").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva10").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva10").src="kyna.png";}
+if(valinta==1)kortti1="kuva10";
+if(valinta==2){kortti2="kuva10";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==11)
+{
+    if(kuvanumero==1){document.getElementById("kuva11").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva11").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva11").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva11").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva11").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva11").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva11").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva11").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva11").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva11").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva11").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva11").src="kyna.png";}
+if(valinta==1)kortti1="kuva11";
+if(valinta==2){kortti2="kuva11";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==12)
+{
+    if(kuvanumero==1){document.getElementById("kuva12").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva12").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva12").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva12").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva12").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva12").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva12").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva12").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva12").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva12").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva12").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva12").src="kyna.png";}
+if(valinta==1)kortti1="kuva12";
+if(valinta==2){kortti2="kuva12";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==13)
+{
+    if(kuvanumero==1){document.getElementById("kuva13").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva13").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva13").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva13").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva13").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva13").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva13").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva13").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva13").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva13").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva13").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva13").src="kyna.png";}
+if(valinta==1)kortti1="kuva13";
+if(valinta==2){kortti2="kuva13";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==14)
+{
+    if(kuvanumero==1){document.getElementById("kuva14").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva14").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva14").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva14").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva14").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva14").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva14").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva14").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva14").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva14").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva14").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva14").src="kyna.png";}
+if(valinta==1)kortti1="kuva14";
+if(valinta==2){kortti2="kuva14";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==15)
+{
+    if(kuvanumero==1){document.getElementById("kuva15").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva15").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva15").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva15").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva15").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva15").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva15").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva15").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva15").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva15").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva15").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva15").src="kyna.png";}
+if(valinta==1)kortti1="kuva15";
+if(valinta==2){kortti2="kuva15";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==16)
+{
+    if(kuvanumero==1){document.getElementById("kuva16").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva16").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva16").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva16").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva16").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva16").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva16").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva16").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva16").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva16").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva16").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva16").src="kyna.png";}
+if(valinta==1)kortti1="kuva16";
+if(valinta==2){kortti2="kuva16";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==17)
+{
+    if(kuvanumero==1){document.getElementById("kuva17").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva17").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva17").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva17").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva17").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva17").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva17").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva17").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva17").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva17").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva17").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva17").src="kyna.png";}
+if(valinta==1)kortti1="kuva17";
+if(valinta==2){kortti2="kuva17";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+
+if(kuvan==18)
+{
+    if(kuvanumero==1){document.getElementById("kuva18").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva18").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva18").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva18").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva18").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva18").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva18").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva18").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva18").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva18").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva18").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva18").src="kyna.png";}
+if(valinta==1)kortti1="kuva18";
+if(valinta==2){kortti2="kuva18";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==19)
+{
+    if(kuvanumero==1){document.getElementById("kuva19").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva19").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva19").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva19").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva19").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva19").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva19").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva19").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva19").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva19").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva19").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva19").src="kyna.png";}
+if(valinta==1)kortti1="kuva19";
+if(valinta==2){kortti2="kuva19";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==20)
+{
+    if(kuvanumero==1){document.getElementById("kuva20").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva20").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva20").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva20").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva20").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva20").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva20").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva20").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva20").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva20").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva20").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva20").src="kyna.png";}
+if(valinta==1)kortti1="kuva20";
+if(valinta==2){kortti2="kuva20";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==21)
+{
+    if(kuvanumero==1){document.getElementById("kuva21").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva21").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva21").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva21").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva21").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva21").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva21").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva21").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva21").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva21").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva21").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva21").src="kyna.png";}
+if(valinta==1)kortti1="kuva21";
+if(valinta==2){kortti2="kuva21";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==22)
+{
+    if(kuvanumero==1){document.getElementById("kuva22").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva22").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva22").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva22").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva22").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva22").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva22").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva22").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva22").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva22").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva22").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva22").src="kyna.png";}
+if(valinta==1)kortti1="kuva22";
+if(valinta==2){kortti2="kuva22";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==23)
+{
+    if(kuvanumero==1){document.getElementById("kuva23").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva23").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva23").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva23").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva23").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva23").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva23").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva23").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva23").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva23").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva23").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva23").src="kyna.png";}
+if(valinta==1)kortti1="kuva23";
+if(valinta==2){kortti2="kuva23";}
+if(kortti1==kortti2){valinta=1;}
+}
+
+if(kuvan==24)
+{
+    if(kuvanumero==1){document.getElementById("kuva24").src="talo.jpeg";}
+if(kuvanumero==2){document.getElementById("kuva24").src="kissa.jpeg";}
+if(kuvanumero==3){document.getElementById("kuva24").src="tennis.jpeg";}
+if(kuvanumero==4){document.getElementById("kuva24").src="jalkapallo.jpeg";}
+if(kuvanumero==5){document.getElementById("kuva24").src="puu.jpeg";}
+if(kuvanumero==6){document.getElementById("kuva24").src="kirja.png";}
+if(kuvanumero==7){document.getElementById("kuva24").src="auto.jpeg";}
+if(kuvanumero==8){document.getElementById("kuva24").src="pyora.jpeg";}
+if(kuvanumero==9){document.getElementById("kuva24").src="lintu.jpeg";}
+if(kuvanumero==10){document.getElementById("kuva24").src="koira.jpeg";}
+if(kuvanumero==11){document.getElementById("kuva24").src="tietokone.jpeg";}
+if(kuvanumero==12){document.getElementById("kuva24").src="kyna.png";}
+if(valinta==1)kortti1="kuva24";
+if(valinta==2){kortti2="kuva24";}
+if(kortti1==kortti2){valinta=1;}
+
+}
+
+
+
+
+/*
+if(kortti1==kortti2){valinta=0;document.getElementById(kortti1).src="kortti.jpeg";
+      document.getElementById(kortti2).src="kortti.jpeg";} */
+
+if(valinta==2) {(setTimeout(kaanto, 2000));rounds++;document.getElementById("tulos").innerHTML=rounds;}
+
+
+
+
+
+}
+
+}
+
+function kaanto()
+{
+
+   
+   if(valinta==2)
+   {
+      
+      if(document.getElementById(kortti1).src==document.getElementById(kortti2).src){document.getElementById("oikein").innerHTML="CORRECT!";document.getElementById("oikein").style.color="green";}
+      
+
+   
+else{
+       document.getElementById("oikein").innerHTML="WRONG!";document.getElementById("oikein").style.color="red";
+      document.getElementById(kortti1).src="kortti.jpeg";
+      document.getElementById(kortti2).src="kortti.jpeg";
+}
+
+    
+
+    
+      valinta=0;
+   }
+
+}
+
+</script>
+
+<div class="flex-container">
+<div class="flex-item"><img id="kuva1" src="kortti.jpeg" alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[0],1)";></div>
+<div class="flex-item"><img id="kuva2" src="kortti.jpeg" alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[1],2)"></div>
+<div class="flex-item"><img id="kuva3"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[2],3)"></div>
+<div class="flex-item"><img id="kuva4"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[3],4)"></div>
+<div class="flex-item"><img id="kuva5"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[4],5)"></div>
+<div class="flex-item"><img id="kuva6" src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[5],6)"></div>
+<div class="flex-item"><img id="kuva7" src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[6],7)"></div>
+<div class="flex-item"><img id="kuva8"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[7],8)"></div>
+</div>
+
+<div class="flex-container">
+<div class="flex-item"><img id="kuva9"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[8],9)"></div>
+<div class="flex-item"><img id="kuva10" src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[9],10)"></div>
+  
+
+<div class="flex-item"><img id="kuva11"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[10],11)"></div>
+<div class="flex-item"><img id="kuva12"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[11],12)"></div>
+<div class="flex-item"><img id="kuva13"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[12],13)"></div>
+<div class="flex-item"><img id="kuva14"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[13],14)"></div>
+<div class="flex-item"><img id="kuva15" src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[14],15)"></div>
+<div class="flex-item"><img id="kuva16"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[15],16)"></div>
+
+
+</div>
+
+<div class="flex-container">
+<div class="flex-item"><img id="kuva17"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[16],17)"></div>
+<div class="flex-item"><img id="kuva18"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[17],18)"></div>
+<div class="flex-item"><img id="kuva19"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[18],19)"></div>
+<div class="flex-item"><img id="kuva20"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[19],20)"></div>
+
+<div class="flex-item"><img id="kuva21"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[20],21)"></div>
+<div class="flex-item"><img id="kuva22"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[21],22)"></div>
+<div class="flex-item"><img id="kuva23"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[22],23)"></div>
+<div class="flex-item"><img id="kuva24"  src="kortti.jpeg"alt="Computer man" style="width:148px;height:148px;" onclick="nayta(kaytetty[23],24)"></div>
+</div>
+
+
+<div class="flex-container">
+<div class="flex-item"><img id="player" src="brain2.png" style="width:148px;height:148px;border-radius:12px;"></div>
+<p class="teksti" id="tulos" style=font-size:30px;color:brown;margin-right:3px;>0 ROUNDS</p><p class="teksti" id="oikein" style=font-size:30px;color:brown;>RESULT</p><button id="nappi" class="button" onclick=testi();>START GAME</button>
+
+
+
+</div>
+
+
+
+
+<footer>Copyright &copy; Jussi Visuri</footer>
+
+
+
+</body>
+</html>
